@@ -1,9 +1,11 @@
 package it.example.jenkins.proof.microservices.account.api;
 
+import it.example.jenkins.proof.microservices.account.exceptions.AccountNotFoundException;
 import it.example.jenkins.proof.microservices.account.model.Account;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -30,9 +32,15 @@ public class Api {
 	}
 	
 	@RequestMapping("/accounts/{number}")
-	public Account findByNumber(@PathVariable("number") String number) {
+	public Account findByNumber(@PathVariable("number") String number) throws AccountNotFoundException {
+		
 		logger.info(String.format("Account.findByNumber(%s)", number));
-		return accounts.stream().filter(it -> it.getNumber().equals(number)).findFirst().get();
+		Optional<Account> result = accounts.stream().filter(it -> it.getNumber().equals(number)).findFirst();
+		
+		if(result.isPresent()){
+			return result.get();
+		}
+		else throw new AccountNotFoundException(number);
 	}
 	
 	@RequestMapping("/accounts/customer/{customer}")
