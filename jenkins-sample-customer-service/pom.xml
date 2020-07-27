@@ -29,6 +29,13 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
 		</dependency>
+		
+		<!-- TEST Junit -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -38,7 +45,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>pl.piomin.microservices.customer.Application</mainClass>
+					<mainClass>it.example.jenkins.proof.microservices.customer.Application</mainClass>
 					<addResources>true</addResources>
 				</configuration>
 				<executions>

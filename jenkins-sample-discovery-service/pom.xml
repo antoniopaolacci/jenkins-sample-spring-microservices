@@ -22,7 +22,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>pl.piomin.microservices.eureka.Application</mainClass>
+					<mainClass>it.example.jenkins.proof.microservices.eureka.Application</mainClass>
 					<addResources>true</addResources>
 				</configuration>
 				<executions>
