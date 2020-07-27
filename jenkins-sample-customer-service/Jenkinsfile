@@ -15,7 +15,7 @@ node {
 
         stage('Build Docker Image') {
             /* This builds the actual image */
-            app = docker.build "jenkins-sample-customer-service:1.0"
+            app = docker.build "antoniopaolacci/jenkins-sample-customer-service:1.0"
         }
 
         stage ('Run Docker Container') {
@@ -24,14 +24,11 @@ node {
         }
 
 	    stage('Push image') {
-	        /* You would need to first register with DockerHub before you can push images to your account*/
-	        			
+	        /* You would need to first register with DockerHub before you can push images to your account*/			
 			echo "Trying to Push Docker Build to DockerHub"
-	        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-	            app.push("${env.BUILD_NUMBER}")
+	        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
 	            app.push("latest")
-	        } 
-	        
+	        }  
 	    }   
 	    
 }
