@@ -1,34 +1,37 @@
 node {
 
-    withMaven(maven:'maven') {
+  /* Groovy script to build my application */
+  def app
 
-        stage('Checkout') {
-            git url: 'https://github.com/antoniopaolacci/jenkins-sample-spring-microservices.git', credentialsId: 'github-credential', branch: 'master'
+ 		stage('Checkout') {   
+ 			 /* Cloning the Repository to our Workspace */
+             echo 'Checkout from file system...'
+             checkout filesystem(clearWorkspace: false, copyHidden: false, path: 'D:\\MyJavaProgetti\\my-microservice-architecture\\jenkins-sample-spring-microservices\\jenkins-sample-customer-service')	
         }
-
+        
         stage('Build') {
-            sh 'mvn clean install'
-
-            def pom = readMavenPom file:'pom.xml'
-            print pom.version
-            env.version = pom.version
+            sh 'mvn clean install -DskipTests'
         }
 
-        stage('Image') {
-            dir ('customer-service') {
-                def app = docker.build "localhost:5000/customer-service:${env.version}"
-                app.push()
-            }
+        stage('Build Docker Image') {
+            /* This builds the actual image */
+            app = docker.build "jenkins-sample-customer-service:1.0"
         }
 
-        stage ('Run') {
-            docker.image("localhost:5000/customer-service:${env.version}").run('-p 3333:3333 -h customer --name customer --link discovery --link account')
+        stage ('Run Docker Container') {
+            /* This run the container from the image */
+            docker.image("jenkins-sample-customer-service:1.0").run('-p 3333:3333 -h customer --name customer')
         }
 
-        stage ('Final') {
-            build job: 'gateway-service-pipeline', wait: false
-        }      
-
-    }
-
+	    stage('Push image') {
+	        /* You would need to first register with DockerHub before you can push images to your account*/
+	        			
+			echo "Trying to Push Docker Build to DockerHub"
+	        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+	            app.push("${env.BUILD_NUMBER}")
+	            app.push("latest")
+	        } 
+	        
+	    }   
+	    
 }

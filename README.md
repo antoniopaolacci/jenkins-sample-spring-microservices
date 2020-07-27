@@ -1,7 +1,7 @@
 # jenkins-sample-spring-microservices
 Jenkins CI/CD microservices pipeline
 
-
+![](https://raw.githubusercontent.com/antoniopaolacci/jenkins-sample-spring-microservices/master/jenkins-pipeline.jpg)
 
 Jenkins become very popular cause the **Jenkins pipeline**, it is a continuous delivery pipeline that executes the software workflow as code. 
 
@@ -87,7 +87,26 @@ node ('node-1') {
 
 **Scripted** type has very few limitations that to with respect to  structure and syntax that tend to be defined by Groovy,thus making it  ideal for users with more complex requirements. 
 
-*Common elements*
+You can use scripted pipeline blocks in a declarative pipeline as a workaround for complex tasks. Example of element *script*:
+
+```
+pipeline {
+    agent any
+    stages {
+        stage('Build Docker Image') {
+            steps {       
+                echo 'Starting to build docker image'
+                script {
+                    def customImage = docker.build("my-image:${env.BUILD_ID}")
+                    customImage.push()
+                }   
+            }
+        }
+    }
+}
+```
+
+*Common elements*: steps and stages
 
 **Steps**
 
@@ -95,7 +114,7 @@ A series of **steps** can be defined within a stage block. These steps are carri
 
 **Stages**
 
-The **stage** block contains all the work that needs to be carried out. The work is  specified in the form of stages. There can be more than one stage within this directive. Each stage performs a specific task. In the following  example, I’ve created multiple stages, each performing a specific task.
+The **stage** block contains all the work that needs to be carried out. The work is  specified in the form of stages. There can be more than one stage within this directive. Each stage performs a specific task and have a bounded context. In the following  example, I’ve created multiple steps, each performing a specific task of single stage.
 
 ```
   ...
