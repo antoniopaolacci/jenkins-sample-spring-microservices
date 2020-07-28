@@ -1,34 +1,32 @@
 node {
 
-    withMaven(maven:'maven') {
-
+		/* Cloning the Git repository to our Jenkins Workspace */
         stage('Checkout') {
             git url: 'https://github.com/antoniopaolacci/jenkins-sample-spring-microservices.git', credentialsId: 'github-credential', branch: 'master'
         }
 
         stage('Build') {
-            sh 'mvn clean install'
-
-            def pom = readMavenPom file:'pom.xml'
-            print pom.version
-            env.version = pom.version
+            sh 'mvn clean install -DskipTests'
         }
 
-        stage('Image') {
-            dir ('discovery-service') {
-                def app = docker.build "localhost:5000/discovery-service:${env.version}"
-                app.push()
-            }
+        stage('Build Image') {
+        
+        	/* Change dir, cause after git checkout we are on /workspace/<dir-checkout>/ */
+        	dir('jenkins-sample-discovery-service') {
+	        	/* This builds the actual image */
+	            app = docker.build "jenkins-sample-discovery-service:1.0"
+        	}
+        	
         }
 
-        stage ('Run') {
-            docker.image("localhost:5000/discovery-service:${env.version}").run('-p 8761:8761 -h discovery --name discovery')
+        stage ('Run Container') {
+            /* This run the container from the image */
+            docker.image("jenkins-sample-discovery-service:1.0").run('-p 8761:8761 -h discovery --name discovery')
         }
-
+        
+        /* Start another upstream pipeline */
         stage ('Final') {
-            build job: 'account-service-pipeline', wait: false
+            build job: 'jenkins-sample-account-service', wait: false
         }      
-
-    }
 
 }
