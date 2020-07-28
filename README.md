@@ -135,3 +135,17 @@ The **stage** block contains all the work that needs to be carried out. The work
   ...
 ```
 
+
+
+Example of different types can be found at:
+
+*Scripted* pipeline:
+
+- https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/jenkins-sample-customer-service/Jenkinsfile 
+- https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/jenkins-sample-discovery-service/Jenkinsfile
+
+*Declarative* pipeline
+
+- https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/Jenkinsfile
+
+- https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/jenkins-sample-account-service/Jenkinsfile
