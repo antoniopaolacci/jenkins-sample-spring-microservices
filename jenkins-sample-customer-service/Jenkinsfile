@@ -4,6 +4,7 @@ node {
   def app
 
  		stage('Checkout') {   
+ 			 
  			 /* Cloning the project to our Jenkins Workspace */
              echo 'Checkout from file system...'
              checkout filesystem(clearWorkspace: false, copyHidden: false, path: 'D:\\MyJavaProgetti\\my-microservice-architecture\\jenkins-sample-spring-microservices\\jenkins-sample-customer-service')	
@@ -24,11 +25,13 @@ node {
         }
 
 	    stage('Push image') {
+	        
 	        /* You would need to first register with DockerHub before you can push images to your account*/			
 			echo "Trying to Push Docker Build to DockerHub..."
 	        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
 	            app.push("latest")
-	        }  
+	        } 
+	         
 	    }   
 	    
 }

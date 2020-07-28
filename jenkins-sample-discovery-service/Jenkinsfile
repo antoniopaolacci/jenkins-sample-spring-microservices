@@ -13,7 +13,8 @@ node {
         
         	/* Change dir, cause after git checkout we are on /workspace/<dir-checkout>/ */
         	dir('jenkins-sample-discovery-service') {
-	        	/* This builds the actual image */
+        	
+				/* This builds the actual image */
 	            app = docker.build "jenkins-sample-discovery-service:1.0"
         	}
         	
