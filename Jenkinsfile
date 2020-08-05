@@ -6,7 +6,7 @@ pipeline {
   stages {
 	stage ('Initialize') {
       steps {
-        echo 'Placeholder.'
+        echo 'Init step.'
       }
     }
     stage ('Checking java version') {
@@ -14,12 +14,12 @@ pipeline {
          sh 'java -version'
        }
      }
-    stage ('maven version') {
+    stage ('Checking maven version') {
       steps {               
           sh 'mvn -version'                
        }
      }
-	stage('Build') {
+	stage('Build without test') {
 	  steps {
          sh 'mvn clean install -DskipTests'
       }
