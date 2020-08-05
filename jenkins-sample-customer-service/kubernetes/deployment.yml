@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: customer-service
+  template:
+    metadata:
+      labels:
+        component: customer-service
+    spec:
+      containers:
+      - name: customer-service
+        image: antoniopaolacci/jenkins-sample-customer-service:1.0
+        ports:
+        - containerPort: 3333

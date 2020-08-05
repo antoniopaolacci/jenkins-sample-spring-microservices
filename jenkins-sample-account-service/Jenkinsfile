@@ -1,8 +1,11 @@
 pipeline {   
+    
     agent any    
+    
     triggers {
-        pollSCM '* * * * *'
-    }    
+        pollSCM 'H * * * *'
+    }  
+      
     stages { 
         stage('Build') {
             steps {
@@ -14,5 +17,26 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('Build Docker Image') {
+        	steps {
+            	docker.build "antoniopaolacci/jenkins-sample-account-service:1.0"
+            }
+        }
+        stage ('Run Docker Container') {
+        	steps {
+            	docker.image("jenkins-sample-account-service:1.0").run('-p 2222:2222 -h account --name account')
+            }
+        }
+	    stage('Push Docker Image') {
+	    	steps {  	
+				echo "Trying to Push Docker Build to DockerHub..."
+			}
+			steps {
+	        	docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+	            app.push("latest")
+	      		}
+	        }   
+	    }  
     }
+    
 }

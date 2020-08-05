@@ -149,3 +149,57 @@ Example of different types can be found at:
 - https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/Jenkinsfile
 
 - https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/jenkins-sample-account-service/Jenkinsfile
+
+**Environment variables**
+
+Let us now have a deep look into the content of the *jenkinsfile*, we can define some environment variables  that are written in capital letters. They are environment variables which take their values by configuring them globally using Jenkins UI.
+
+In this way, you  can build this pipeline using any private or public internet, registry and a K8s cluster on any service provider that you choose. All you have to do is to  configure these variables correctly giving them the suitable values,  thus you don’t need to touch the jenkinsfile at all.
+
+In order to configure any environment variable using jenkins UI, follow these steps:
+
+-  Navigate to **Manage Jenkins** > **Configure System** > **Global properties **> **Environment variables**
+- Give the **Name** and the **Value** of the variable.
+- Click on **Save**.
+
+Now, let’s have a look on the different parts of the *jenkinsfile*
+
+```
+pipeline {
+ 
+    environment {
+        
+        //put your own environment variables        
+        REGISTRY_URI = 
+   }
+
+...
+```
+
+#### Github, Docker and Kubernetes pipeline
+
+Install necessary jenkins plugin, docker and kubernetes. 
+
+Navigate to **Manage Jenkins** **>** **Configure Credentials > Credentials > ****Add credentials** 
+
+![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/credentials-username-password-github.jpg)
+
+Configure your *$HOME/.kube/config* in a kind: *secret file.*
+
+![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/credentials-username-password-github.jpg)
+
+Configure your github username and password of kind: *username with password*.
+
+Navigate to **Manage Jenkins** **>** **Configure System ** > **Configure Clouds** 
+
+Configure docker URL and test connection.
+
+Confifure kubernetes using kube config *secret file* and test connection.
+
+![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/configure-cloud.jpg)
+
+![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/docker-config.jpg)
+
+![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/k8s-config.jpg)
+
+Example of docker and kubernetes pipeline can be found on Jenkinsfile of microservices.
