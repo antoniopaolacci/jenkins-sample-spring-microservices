@@ -180,7 +180,7 @@ pipeline {
 
 Install necessary jenkins plugin, docker and kubernetes. 
 
-Navigate to **Manage Jenkins** **>** **Configure Credentials > Credentials > ****Add credentials** 
+Navigate to **Manage Jenkins** > **Configure Credentials** > **Credentials** > **Add credentials** 
 
 ![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/credentials-username-password-github.jpg)
 
@@ -190,15 +190,15 @@ Configure your *$HOME/.kube/config* in a kind: *secret file.*
 
 Configure your github username and password of kind: *username with password*.
 
-Navigate to **Manage Jenkins** **>** **Configure System ** > **Configure Clouds** 
-
-Configure docker URL and test connection.
-
-Confifure kubernetes using kube config *secret file* and test connection.
+Navigate to **Manage Jenkins** > **Configure System** > **Configure Clouds** 
 
 ![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/configure-cloud.jpg)
 
+Configure docker URL and test connection.
+
 ![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/docker-config.jpg)
+
+Confifure kubernetes using kube config *secret file* and test connection.
 
 ![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/k8s-config.jpg)
 
