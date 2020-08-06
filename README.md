@@ -158,11 +158,11 @@ In this way, you  can build this pipeline using any private or public internet, 
 
 In order to configure any environment variable using jenkins UI, follow these steps:
 
--  Navigate to **Manage Jenkins** > **Configure System** > **Global properties **> **Environment variables**
+- Navigate to **Manage Jenkins** > **Configure System** > **Global properties** > **Environment variables**
 - Give the **Name** and the **Value** of the variable.
 - Click on **Save**.
 
-Now, let’s have a look on the different parts of the *jenkinsfile*
+Now, an example of the *Jenkinsfile*
 
 ```
 pipeline {
@@ -198,8 +198,8 @@ Configure docker URL and test connection.
 
 ![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/docker-config.jpg)
 
-Confifure kubernetes using kube config *secret file* and test connection.
+Configure kubernetes using kube config *secret file* and test connection.
 
 ![](https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/k8s-config.jpg)
 
-Example of docker and kubernetes pipeline can be found on Jenkinsfile of microservices.
+Example of docker and kubernetes pipeline can be found on the *Jenkinsfile* of various java microservices projects.
