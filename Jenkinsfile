@@ -6,14 +6,14 @@ pipeline {
      pollSCM '* * * * *'
   }
   
-  // Define variable
-  def myVersion = "2.0.3"  
-	  
+  environment {
+     myVersion = "2.0.3"  
+  }
   
   stages {
 	stage ('Initialize') {
       steps {
-        echo 'Init step. CI/CD version: ${myVersion}'
+        echo 'Init step. CI/CD version: ${env.myVersion}'
       }
     }
     stage ('Checking java version') {
