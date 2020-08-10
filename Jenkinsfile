@@ -7,13 +7,13 @@ pipeline {
   }
   
   environment {
-     myVersion = "2.0.3"  
+     myVersion='2.0.3' 
   }
   
   stages {
 	stage ('Initialize') {
       steps {
-        echo 'Init step. CI/CD version: ${env.myVersion}'
+        echo "Init step. CI/CD version: ${env.myVersion}"
       }
     }
     stage ('Checking java version') {
