@@ -3,9 +3,16 @@ pipeline {
 	agent any    
 	
 	triggers {
-	    pollSCM 'H * * * *'
-	}  
-	  
+	    pollSCM '* * * * *'
+	}
+	
+	parameters {
+        choice(
+            choices: ['greeting' , 'silence'],
+            description: '',
+            name: 'REQUESTED_ACTION')
+    }
+	
 	stages { 
 	    stage('Build') {
 	        steps {
@@ -14,26 +21,43 @@ pipeline {
 	    }
 	    stage('Test') {
 	        steps {
-	            sh 'mvn test'
+	            sh 'mvn test -Dspring.profiles.active=dev'
 	        }
 	    }
 	    stage('Build Docker Image') {
 	    	steps {
-	        	docker.build "antoniopaolacci/jenkins-sample-account-service:1.0"
+	    		// You can try to use groovy scripting syntax into the declarative pipeline. 
+	    		// For some step there is no declarative syntax yet.
+	    		script {
+	        		docker.build "antoniopaolacci/jenkins-sample-account-service:1.0"
+	        	}
 	        }
 	    }
 	    stage ('Run Docker Container') {
 	    	steps {
-	        	docker.image("jenkins-sample-account-service:1.0").run('-p 2222:2222 -h account --name account')
+	    		script {
+	    			try {
+	        			docker.image("antoniopaolacci/jenkins-sample-account-service:1.0").run('-p 2222:2222 -h account --name account --link discovery')
+	        			} catch (err) {
+	  						echo "Container already created."
+						}
+	        	}
 	        }
 	    }
 	    stage('Push Docker Image') {
-	    	steps {  	
-				echo "Trying to Push Docker Build to DockerHub..."
-			}
+
+			when {
+                // Only say hello if a "greeting" is requested
+                expression { params.REQUESTED_ACTION == 'greeting' }
+            }
 			steps {
-	        	docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-	            app.push("latest")
+				
+				echo "Trying to Push Docker Build to DockerHub..."
+			
+				script {
+		        	docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+		            app.push("latest")
+		        	}
 	      		}
 	        }   
 	    }  

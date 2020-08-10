@@ -3,7 +3,7 @@ server:
 
 eureka:  
   client:
-    serviceUrl:
+    serviceUrl:    #If is set environment variable  DISCOVERY_URL use its value, otherwise use http://localhost:8761
       defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 1

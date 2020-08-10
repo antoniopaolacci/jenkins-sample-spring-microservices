@@ -1,8 +1,9 @@
 node {
 
-  /* Groovy script to build my application */
-  def app
-
+  	/* Groovy script to build my application */
+    def app
+ 	def DO_EXECUTION = false;
+ 
 	stage('Checkout') {   
 		 
 		 /* Cloning the project to our Jenkins Workspace */
@@ -10,6 +11,7 @@ node {
 	     checkout filesystem(clearWorkspace: false, copyHidden: false, path: 'D:\\MyJavaProgetti\\my-microservice-architecture\\jenkins-sample-spring-microservices\\jenkins-sample-customer-service')	
 	}
 	
+	/* Build partially...cause I am on jenkins-sample-customer-service pom.xml project */
 	stage('Build') {
 	    sh 'mvn clean install -DskipTests'
 	}
@@ -18,26 +20,30 @@ node {
 	    /* This builds the actual image */
 	    app = docker.build "antoniopaolacci/jenkins-sample-customer-service:1.0"
 	}
-	
-	// This run the container from the image
+
 	stage ('Run Docker Container') {
 	
 		try {
-	  		docker.image("jenkins-sample-customer-service:1.0").run('-p 3333:3333 -h customer --name customer')
+	  		docker.image("jenkins-sample-customer-service:1.0").run('-p 3333:3333 -h customer --name customer --link discovery')
 		} catch (err) {
-	  		echo "container already created."
+	  		echo "Container already created."
 		}   
 	}
-	
+				
 	stage('Push image') {
-	        	
-		echo "Trying to Push Docker Build to DockerHub..."
-	    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-	        app.push("latest")
-	    }
-	       
-	}
 	
+		if(DO_EXECUTION) {      	
+			echo "Trying to Push Docker Build to DockerHub..."
+		
+		    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+		        app.push("latest")
+		    }
+	    } else {
+	     	echo 'skipping stage...cause low network bandwidth'
+	    }
+	            
+	}
+	    
 	stage ('Wait for approval') {
 	   input 'Approve deployment on K8s?'
 	}
@@ -51,11 +57,12 @@ node {
 	   /* change dir */
 		dir('kubernetes') {
 	        kubeconfig(credentialsId: 'mykubeconfig', serverUrl: 'https://kubernetes.docker.internal:6443') {
-	            sh 'kubectl config view'
-	            sh 'kubectl api-resources'
+	            sh 'kubectl config get-contexts'
+	            sh 'kubectl config use-context docker-desktop'  /* change contex to my Docker For Windows kubernetes cluster demo */
 	            sh 'kubectl apply -f deployment.yml'
 	            }     
 	        }
-	   }   
-	    
+	   }    
 }
+
+> 

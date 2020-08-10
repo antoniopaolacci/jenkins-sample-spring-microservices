@@ -150,6 +150,12 @@ Example of different types can be found at:
 
 - https://github.com/antoniopaolacci/jenkins-sample-spring-microservices/blob/master/jenkins-sample-account-service/Jenkinsfile
 
+**Scripted vs Declarative**
+
+Read the following blog post (thanks to: Szymon Stepniak):
+
+https://e.printstacktrace.blog/jenkins-scripted-pipeline-vs-declarative-pipeline-the-4-practical-differences/
+
 **Environment variables**
 
 Let us now have a deep look into the content of the *jenkinsfile*, we can define some environment variables  that are written in capital letters. They are environment variables which take their values by configuring them globally using Jenkins UI.

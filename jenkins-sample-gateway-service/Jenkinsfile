@@ -13,26 +13,22 @@ node {
     stage('Build Docker Image') {
     
     	/* Change dir, cause after git checkout we are on /workspace/<dir-checkout>/ */
-    	dir('jenkins-sample-discovery-service') {
+    	dir('jenkins-sample-gateway-service') {
     	
 			/* This builds the actual image */
-	        app = docker.build "antoniopaolacci/jenkins-sample-discovery-service:1.0"
-	    } 		
+			app = docker.build "antoniopaolacci/jenkins-sample-gateway-service:1.0"
+    	} 
     }
-    
-    stage ('Run Docker Container') {
-        
-    	try {
-        	/* This run the container from the image */
-        	docker.image("antoniopaolacci/jenkins-sample-discovery-service:1.0").run('-p 8761:8761 -h discovery --name discovery')
-        } catch (err) {
-	  		echo "Container already created."
-		}
-    }
-    
-    /* Start another upstream pipeline */
-    stage ('Final') {
-        build job: 'jenkins-sample-account-service', wait: false
-    }      
 
+    stage ('Run Docker Container') {
+       
+       try {
+	        /* This run the container from the image */
+	        docker.image("antoniopaolacci/jenkins-sample-gateway-service:1.0").run('-h gateway --name gateway --link discovery') 
+       } catch (err) {
+	  	   echo "Container already created."
+	   } 
+ 
+    }
+    
 }

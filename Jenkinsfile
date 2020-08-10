@@ -1,12 +1,19 @@
 pipeline {
+
   agent any
+  
   triggers {
      pollSCM '* * * * *'
   }
+  
+  // Define variable
+  def myVersion = "2.0.3"  
+	  
+  
   stages {
 	stage ('Initialize') {
       steps {
-        echo 'Init step.'
+        echo 'Init step. CI/CD version: ${myVersion}'
       }
     }
     stage ('Checking java version') {
@@ -30,4 +37,5 @@ pipeline {
       }
     }
   }
+  
 }
